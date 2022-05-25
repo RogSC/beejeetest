@@ -1,23 +1,13 @@
 <?php
 namespace App\Models;
 
-use App\Database\Connection;
+use App\Core\Model;
 
 /**
  * Class User
  * @package App\Models
  */
-class User
+class User extends Model
 {
-	protected $db;
-
-	public function __construct()
-	{
-		$this->db = Connection::getInstance();
-	}
-
-	public function getById(int $id): array
-	{
-		return $this->db->select('user')->where(['id' => $id])->execute();
-	}
+	protected string $tableName = 'user';
 }
