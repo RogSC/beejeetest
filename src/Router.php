@@ -25,11 +25,12 @@ class Router
 	}
 
 	/**
-	 * @param string $url
 	 * @return mixed
 	 */
-	public static function execute(string $url): mixed
+	public static function execute(): mixed
 	{
+		$url = str_replace('?'.$_SERVER['QUERY_STRING'], '', $_SERVER['REQUEST_URI']);
+
 		foreach (self::$routes as $pattern => $callback)
 		{
 			if (preg_match($pattern, $url, $params))
@@ -38,5 +39,8 @@ class Router
 				return call_user_func_array($callback, array_values($params));
 			}
 		}
+
+		header("HTTP/1.1 404 Not Found");
+		return false;
 	}
 }
