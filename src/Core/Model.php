@@ -29,12 +29,23 @@ class Model
 	}
 
 	/**
-	 * @param array $values
+	 * @param string $fieldId
+	 * @param string $sortType
 	 * @return $this
 	 */
-	public function order(array $values): static
+	public function order(string $fieldId, string $sortType): static
 	{
-		$this->order = $values;
+		if (!in_array($fieldId, $this->getSortableFields()))
+		{
+			$fieldId = 'id';
+		}
+
+		if ($sortType !== 'asc' && $sortType !== 'desc')
+		{
+			$sortType = 'asc';
+		}
+
+		$this->order = [$fieldId => $sortType];
 
 		return $this;
 	}
@@ -76,6 +87,16 @@ class Model
 	}
 
 	/**
+	 * @return string
+	 */
+	public function getCount(): string
+	{
+		$dbExec = $this->db->selectCount($this->tableName);
+
+		return current(current($dbExec->execute()));
+	}
+
+	/**
 	 * @param $id
 	 * @return array
 	 */
@@ -101,5 +122,27 @@ class Model
 	public function update(int $id, array $values)
 	{
 		$this->db->update($this->tableName)->values($values)->where(['id' => $id])->execute();
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getFields(): array
+	{
+		return [];
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getSortableFields(): array
+	{
+		$sortableFields = array_filter($this->getFields(), function ($field) {
+			return $field['sortable'];
+		});
+
+		return array_map(function ($field) {
+			return $field['id'];
+		}, $sortableFields);
 	}
 }
