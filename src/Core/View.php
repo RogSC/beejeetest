@@ -1,6 +1,10 @@
 <?php
 namespace App\Core;
 
+/**
+ * Class View
+ * @package App\Core
+ */
 class View
 {
 	public function generate($contentView, $data = [], $templateView = 'main')
