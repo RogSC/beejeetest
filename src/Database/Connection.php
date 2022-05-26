@@ -58,6 +58,17 @@ class Connection
 	}
 
 	/**
+	 * @param string $table
+	 * @return $this
+	 */
+	public function selectCount(string $table): static
+	{
+		$this->sqlQuery = "SELECT count(*) FROM `$table` ";
+
+		return $this;
+	}
+
+	/**
 	 * @param array $where
 	 * @param string $op
 	 * @return $this
@@ -67,7 +78,7 @@ class Connection
 		$values = [];
 		foreach ($where as $k => $v)
 		{
-			$values[] = "`$k` $op '$v'";
+			$values[] = "`$k` $op ".$this->pdo->quote($v);
 		}
 
 		$str = implode(' AND ', $values);
@@ -95,6 +106,9 @@ class Connection
 	 */
 	public function limit(int $limit, int $offset = 0): static
 	{
+		$limit = intval($limit);
+		$offset = intval($offset);
+
 		if ($offset)
 		{
 			$resStr = $offset . "," . $limit;
@@ -148,9 +162,9 @@ class Connection
 			$valueKey = explode(' ', $k);
 			$valueKey = $valueKey[0];
 			$cols[] = "`$valueKey`";
-			$masks[] = "'".$value."'";
+			$masks[] = $this->pdo->quote($value);
 
-			$valuesForUpdate[] = "`$valueKey`='$value'";
+			$valuesForUpdate[] = "`$valueKey`=".$this->pdo->quote($value);
 		}
 
 		if ($this->type == "insert")
