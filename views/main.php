@@ -16,7 +16,11 @@
                 <h3>ToDo list</h3>
 
                 <div class="col-md-3 text-end">
-                    <button type="button" class="btn btn-outline-primary me-2">Login</button>
+                    <?if (!$isLogin) {?>
+                        <a href="/auth" class="btn btn-outline-primary me-2">Login</a>
+                    <?} else {?>
+                        <a href="/out" class="btn btn-outline-primary me-2">Logout</a>
+                    <?}?>
                 </div>
             </div>
         </header>
@@ -43,5 +47,6 @@
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
         <script src="https://kit.fontawesome.com/93bcdcea0e.js" crossorigin="anonymous"></script>
+        <script src="/public/js/script.js"></script>
     </body>
 </html>
